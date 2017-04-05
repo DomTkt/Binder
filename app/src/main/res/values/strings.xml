@@ -5,4 +5,16 @@
     <string name="tab_setting">Setting</string>
     <string name="tab_account">Account</string>
 
+
+    //Authentification activity
+    <string name="hint_login">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="text_button_signin">Sign in</string>
+    <string name="text_button_signup">Sign up</string>
+    <string name="text_view_other_signin">Other sign in</string>
+        //Error
+    <string name="error_email_non_compliant">Email non-compliant</string>
+    <string name="error_password_lenght">Passwords should be at least 6 characters in length</string>
+    <string name="error_password_empty">Password can not empty</string>
+
 </resources>
