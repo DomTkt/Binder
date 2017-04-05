@@ -17,6 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfilCustom"></activity>
+        <activity android:name=".PaymentActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 
 </manifest>
