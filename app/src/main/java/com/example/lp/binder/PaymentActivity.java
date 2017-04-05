@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.stripe.android.model.Card;
 
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -86,7 +87,21 @@ public class PaymentActivity extends AppCompatActivity {
         if(!expDatePattern.matcher(etExp.getText().toString()).matches()){
             isConform = false;
             etExp.setError("Ce champ doit etre du type : \"01/12\" avec 01 pour le mois et 12 pour l'année");
+        }else{
+            if(Integer.valueOf(etExp.getText().toString().split("/")[0])>12 || Integer.valueOf(etExp.getText().toString().split("/")[0])<1){
+                isConform = false;
+                etExp.setError("Le mois doit etre compris entre 01 et 12");
+            }
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            int validityMaxYear = Calendar.getInstance().get(Calendar.YEAR)+4;
+            int yearWritten = Integer.valueOf(etExp.getText().toString().split("/")[1]) + 2000;
+            if(yearWritten < currentYear || yearWritten > validityMaxYear){
+                isConform = false;
+                etExp.setError("L'année doit etre comprise entre " + currentYear +" et "+ validityMaxYear);
+            }
         }
+
+
 
         return isConform;
     }
