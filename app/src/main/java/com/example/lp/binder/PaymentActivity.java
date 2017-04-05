@@ -58,6 +58,16 @@ public class PaymentActivity extends AppCompatActivity {
                     expYear = Integer.valueOf(etExp.getText().toString().split("/")[1]);
                     CVC = etCVC.getText().toString();
                     Card card = new Card(number, expMonth, expYear, CVC);
+                    if(!card.validateCard()){
+                        if(!card.validateNumber())
+                            etNumber.setError("Ce champs n'est pas remplis correctement");
+                        if(!card.validateExpMonth())
+                            etExp.setError("Ce champs n'est pas remplis correctement");
+                        if(!card.validateExpYear())
+                            etExp.setError("Ce champs n'est pas remplis correctement");
+                        if(!card.validateCVC())
+                            etCVC.setError("Ce champs n'est pas remplis correctement");
+                    }
                 }else{
                     Toast.makeText(ctx,"Vous n'avez pas rempli tout les champs correctement", Toast.LENGTH_SHORT).show();
                 }
@@ -68,7 +78,8 @@ public class PaymentActivity extends AppCompatActivity {
     public boolean isConform(){
         boolean isConform = true;
 
-        Pattern expDatePattern = Pattern.compile("^[0-9][0-9]/[0-9][0-9]$");
+        Pattern expDatePattern = Pattern.compile("^[0-9][0-9]/[0-9][0-9][0-9][0-9]$");
+
         if(etNumber.getText().toString().isEmpty()){
             isConform = false;
             etNumber.setError("Veuillez remplir ce champs");
@@ -87,20 +98,19 @@ public class PaymentActivity extends AppCompatActivity {
         if(!expDatePattern.matcher(etExp.getText().toString()).matches()){
             isConform = false;
             etExp.setError("Ce champ doit etre du type : \"01/12\" avec 01 pour le mois et 12 pour l'année");
-        }else{
-            if(Integer.valueOf(etExp.getText().toString().split("/")[0])>12 || Integer.valueOf(etExp.getText().toString().split("/")[0])<1){
+        }else {
+            if (Integer.valueOf(etExp.getText().toString().split("/")[0]) > 12 || Integer.valueOf(etExp.getText().toString().split("/")[0]) < 1) {
                 isConform = false;
                 etExp.setError("Le mois doit etre compris entre 01 et 12");
             }
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-            int validityMaxYear = Calendar.getInstance().get(Calendar.YEAR)+4;
-            int yearWritten = Integer.valueOf(etExp.getText().toString().split("/")[1]) + 2000;
-            if(yearWritten < currentYear || yearWritten > validityMaxYear){
+            int validityMaxYear = Calendar.getInstance().get(Calendar.YEAR) + 4;
+            int yearWritten = Integer.valueOf(etExp.getText().toString().split("/")[1]);
+            if (yearWritten < currentYear || yearWritten > validityMaxYear) {
                 isConform = false;
-                etExp.setError("L'année doit etre comprise entre " + currentYear +" et "+ validityMaxYear);
+                etExp.setError("L'année doit etre comprise entre " + currentYear + " et " + validityMaxYear);
             }
         }
-
 
 
         return isConform;

@@ -68,7 +68,7 @@
                         android:id="@+id/et_exp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="MM/YY"/>
+                        android:hint="MM/YYYY"/>
 
                 </android.support.design.widget.TextInputLayout>
 
