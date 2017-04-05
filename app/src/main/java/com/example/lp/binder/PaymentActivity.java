@@ -9,10 +9,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.stripe.android.Stripe;
+import com.stripe.android.TokenCallback;
+import com.stripe.android.exception.AuthenticationException;
 import com.stripe.android.model.Card;
+import com.stripe.android.model.Token;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;
+
+import static java.security.AccessController.getContext;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -68,6 +74,11 @@ public class PaymentActivity extends AppCompatActivity {
                         if(!card.validateCVC())
                             etCVC.setError("Le CVC n'est pas valide");
                     }
+                    try {
+                        createToken(card);
+                    } catch (AuthenticationException e) {
+                        e.printStackTrace();
+                    }
                 }else{
                     Toast.makeText(ctx,"Vous n'avez pas rempli tout les champs correctement", Toast.LENGTH_SHORT).show();
                 }
@@ -114,5 +125,21 @@ public class PaymentActivity extends AppCompatActivity {
 
 
         return isConform;
+    }
+
+    public void createToken(Card card) throws AuthenticationException {
+        Stripe stripe = new Stripe(ctx, "PUBLIC KEY");
+        stripe.createToken(
+                card,
+                new TokenCallback() {
+                    public void onSuccess(Token token) {
+                        // Send token to your server
+                    }
+                    public void onError(Exception error) {
+                        // Show localized error message
+                        Toast.makeText(ctx,error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 }
