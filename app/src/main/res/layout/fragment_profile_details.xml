@@ -50,7 +50,7 @@
                 android:textSize="12sp"/>
 
             <TextView
-                android:id="@+id/fragment_profile_details_looking_or"
+                android:id="@+id/fragment_profile_details_looking_for"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
