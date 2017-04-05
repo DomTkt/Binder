@@ -51,7 +51,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:hint="CARD NUMBER"/>
+                        android:hint="CARD NUMBER"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -68,7 +69,8 @@
                         android:id="@+id/et_exp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="MM/YYYY"/>
+                        android:hint="MM/YYYY"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -87,7 +89,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:hint="CVC"/>
+                        android:hint="CVC"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +106,7 @@
                 android:layout_width="150dp"
                 android:layout_height="40dp"
                 android:text="VALIDATE"
-                android:background="#5C6BC0"
+                android:background="@color/colorButton"
                 android:textColor="@android:color/white"
                 />
 
