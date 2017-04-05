@@ -45,6 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        getFragmentManager().beginTransaction().add(R.id.contentContainer, new HomeFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.contentContainer, new HomeFragment()).commit();
     }
 }
