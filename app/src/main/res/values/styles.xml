@@ -14,7 +14,7 @@
     </style>
 
     <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorButton</item>
     </style>
 
 </resources>
