@@ -1,0 +1,20 @@
+<tabs>
+    <tab
+
+        id="@+id/tab_home"
+        icon="@drawable/ic_action_home"
+        title="@string/tab_home" />
+    <tab
+        id="@+id/tab_message"
+        icon="@drawable/ic_action_message"
+        title="@string/tab_message" />
+    <tab
+        id="@+id/tab_setting"
+        icon="@drawable/ic_action_setting"
+        title="@string/tab_setting" />
+
+    <tab
+        id="@+id/tab_account"
+        icon="@drawable/ic_action_account"
+        title="@string/tab_account" />
+</tabs>
