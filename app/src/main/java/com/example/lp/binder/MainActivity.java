@@ -1,6 +1,5 @@
 package com.example.lp.binder;
 
-import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,13 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (tabId == R.id.tab_message) {
                     System.out.println("TAB MESSAGE");
-                }
-
-                if (tabId == R.id.tab_account) {
-                    System.out.println("TAB account");
-                    Intent i = new Intent(MainActivity.this, ProfilCustom.class);
-                    startActivity(i);
-
                 }
             }
         });

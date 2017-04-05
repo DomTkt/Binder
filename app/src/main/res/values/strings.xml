@@ -4,6 +4,5 @@
     <string name="tab_message">Message</string>
     <string name="tab_setting">Setting</string>
     <string name="tab_account">Account</string>
-    <string name="title_activity_authenfication">Authenfication</string>
 
 </resources>
