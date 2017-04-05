@@ -60,13 +60,13 @@ public class PaymentActivity extends AppCompatActivity {
                     Card card = new Card(number, expMonth, expYear, CVC);
                     if(!card.validateCard()){
                         if(!card.validateNumber())
-                            etNumber.setError("Ce champs n'est pas remplis correctement");
+                            etNumber.setError("Ce numéro n'existe pas");
                         if(!card.validateExpMonth())
-                            etExp.setError("Ce champs n'est pas remplis correctement");
+                            etExp.setError("Cette date n'est pas valide");
                         if(!card.validateExpYear())
-                            etExp.setError("Ce champs n'est pas remplis correctement");
+                            etExp.setError("Cette date n'est pas valide");
                         if(!card.validateCVC())
-                            etCVC.setError("Ce champs n'est pas remplis correctement");
+                            etCVC.setError("Le CVC n'est pas valide");
                     }
                 }else{
                     Toast.makeText(ctx,"Vous n'avez pas rempli tout les champs correctement", Toast.LENGTH_SHORT).show();
@@ -97,7 +97,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         if(!expDatePattern.matcher(etExp.getText().toString()).matches()){
             isConform = false;
-            etExp.setError("Ce champ doit etre du type : \"01/12\" avec 01 pour le mois et 12 pour l'année");
+            etExp.setError("Ce champ doit etre du type : \"01/2018\" avec 01 pour le mois et 2018 pour l'année");
         }else {
             if (Integer.valueOf(etExp.getText().toString().split("/")[0]) > 12 || Integer.valueOf(etExp.getText().toString().split("/")[0]) < 1) {
                 isConform = false;
