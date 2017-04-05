@@ -14,8 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_link_black_24dp"
-            android:tint="#eee"/>
+            android:src="@mipmap/ic_binder"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,13 +60,24 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/fragment_profile_details_edit_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_mode_edit_black_24dp"
+                android:tint="#ccc"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/fragment_profile_details_match_icon"

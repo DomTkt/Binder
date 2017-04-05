@@ -26,6 +26,7 @@ public class ProfileDetailsFragment extends Fragment {
     private TextView ageTextView;
     private TextView lookingForTextView;
     private TextView descriptionTextView;
+    private ImageView editButton;
     private ImageView matchIcon;
     private ImageView chatIcon;
     private ImageView rdvIcon;
@@ -44,6 +45,7 @@ public class ProfileDetailsFragment extends Fragment {
         ageTextView = (TextView) view.findViewById(R.id.fragment_profile_details_age);
         lookingForTextView = (TextView) view.findViewById(R.id.fragment_profile_details_looking_for);
         descriptionTextView = (TextView) view.findViewById(R.id.fragment_profile_details_description_text);
+        editButton = (ImageView) view.findViewById(R.id.fragment_profile_details_edit_icon);
         matchIcon = (ImageView) view.findViewById(R.id.fragment_profile_details_match_icon);
         chatIcon = (ImageView) view.findViewById(R.id.fragment_profile_details_chat_icon);
         rdvIcon = (ImageView) view.findViewById(R.id.fragment_profile_details_rdv_icon);

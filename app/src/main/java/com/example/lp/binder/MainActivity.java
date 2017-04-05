@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.lp.binder.fragment.HomeFragment;
+import com.example.lp.binder.fragment.ProfileDetailsFragment;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch(tabId) {
                     case R.id.tab_home:
-                        fragment = new HomeFragment();
+                        fragment = HomeFragment.newInstance();
                         break;
                     case R.id.tab_message:
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.tab_account:
-
+                        fragment = ProfileDetailsFragment.newInstance();
                         break;
                 }
                 if(fragment != null) {
