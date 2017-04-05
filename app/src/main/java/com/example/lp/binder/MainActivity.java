@@ -1,10 +1,13 @@
 package com.example.lp.binder;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.lp.binder.fragment.HomeFragment;
+import com.example.lp.binder.fragment.ProfileDetailsFragment;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -22,13 +25,23 @@ public class MainActivity extends AppCompatActivity {
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_home) {
-                    System.out.println("TAB HOME");
+                Fragment fragment = null;
+                switch(tabId) {
+                    case R.id.tab_home:
+                        fragment = HomeFragment.newInstance();
+                        break;
+                    case R.id.tab_message:
 
+                        break;
+                    case R.id.tab_setting:
+
+                        break;
+                    case R.id.tab_account:
+                        fragment = ProfileDetailsFragment.newInstance();
+                        break;
                 }
-
-                if (tabId == R.id.tab_message) {
-                    System.out.println("TAB MESSAGE");
+                if(fragment != null) {
+                    getFragmentManager().beginTransaction().add(R.id.contentContainer, fragment).commit();
                 }
             }
         });

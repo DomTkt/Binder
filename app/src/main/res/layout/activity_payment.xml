@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:paddingTop="16dp"
         tools:context="com.example.lp.binder.PaymentActivity">
 
 
@@ -19,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/iv_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
                 android:src="@drawable/return_arrow"/>
 
             <ImageView
@@ -34,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="#f2f2f2">
+                android:background="#E8EAF6">
 
 
                 <android.support.design.widget.TextInputLayout
@@ -51,7 +52,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:hint="CARD NUMBER"/>
+                        android:hint="CARD NUMBER"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -68,7 +70,9 @@
                         android:id="@+id/et_exp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="MM/YY"/>
+                        android:hint="MM/YYYY"
+                        android:inputType="text"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -87,7 +91,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:hint="CVC"/>
+                        android:hint="CVC"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -102,7 +107,9 @@
                 android:layout_gravity="center"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:background="@drawable/validate"
+                android:text="VALIDATE"
+                android:background="@color/colorButton"
+                android:textColor="@android:color/white"
                 />
 
         </LinearLayout>
