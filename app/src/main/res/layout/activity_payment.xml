@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:paddingTop="16dp"
         tools:context="com.example.lp.binder.PaymentActivity">
 
 
@@ -19,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/iv_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
                 android:src="@drawable/return_arrow"/>
 
             <ImageView
