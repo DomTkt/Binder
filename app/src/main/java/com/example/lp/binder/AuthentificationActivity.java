@@ -51,7 +51,6 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
     private GoogleApiClient googleApiClient;
     private FirebaseUser user;
     private static final int GOOGLE_INTENT_RESULT = 9000;
-    public static final String USER_UID = "userUid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,6 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Intent intent = new Intent(AuthentificationActivity.this,MainActivity.class);
-                    intent.putExtra(USER_UID,user.getUid());
                     AuthentificationActivity.this.startActivity(intent);
                     finish();
                 } else {

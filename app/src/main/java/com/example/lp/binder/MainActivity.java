@@ -37,26 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        databaseFirebase = FirebaseDatabase.getInstance().getReference();
-        if( getIntent() != null)
-            userUid = getIntent().getStringExtra(AuthentificationActivity.USER_UID);
-
-        userUid = "1";
-        databaseFirebase.child("users").child("user1").child("user_name").getRef().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                name = dataSnapshot.getValue(String.class);
-                System.out.println( " my name is " + name);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
 
         /*Intent i = new Intent(this, PaymentActivity.class);
         startActivity(i);

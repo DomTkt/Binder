@@ -23,11 +23,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.data.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,12 +51,12 @@ public class ProfilCustom extends AppCompatActivity {
     @BindView(R.id.warningSearch) ImageView warningSearch;
     private ImageView warningNom;
     private ImageView warningPrenom;
-    private TextView locationUser;
+    @BindView(R.id.locationUser) TextView locationUser;
+    @BindView(R.id.choosePicture) ImageView imageView;
 
 
     @BindView(R.id.submit_account) Button submit;
-    @BindView(R.id.editNom) EditText editNom;
-    @BindView(R.id.editPrenom) EditText editPrenom;
+    @BindView(R.id.editNickname) EditText editNom;
     @BindView(R.id.editAge) EditText editOld;
     @BindView(R.id.editBiography) EditText editBiography;
     private String genre;
@@ -69,16 +72,13 @@ public class ProfilCustom extends AppCompatActivity {
         ButterKnife.bind(this);
 
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
-        if( getIntent() != null)
-            userUid = getIntent().getStringExtra(AuthentificationActivity.USER_UID);
-        userUid = "1";
-        databaseFirebase.child("users").child("user" + userUid).getRef().addValueEventListener(new ValueEventListener() {
+        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseFirebase.child("users").child(userUid).getRef().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                editNom.setText(dataSnapshot.child("user_name").getValue(String.class));
-                editPrenom.setText(dataSnapshot.child("user_firstName").getValue(String.class));
-                int gender = dataSnapshot.child("user_gender").getValue(Integer.class);
-                if(gender == 1) {
+                editNom.setText(dataSnapshot.child(User.NICKNAME).getValue(String.class));
+                String gender = dataSnapshot.child(User.GENDER).getValue(String.class);
+                if(gender.equals("gender1")) {
                     isMan.setChecked(true);
                     genre = isMan.getText().toString();
                 }
@@ -87,14 +87,16 @@ public class ProfilCustom extends AppCompatActivity {
                     genre = isWoman.getText().toString();
                 }
 
-                int searchGender = dataSnapshot.child("user_genderPref").child("gender1").getValue(Integer.class);
+                String searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).getValue(String.class);
                 checkGenderSearch(searchGender);
-                if(dataSnapshot.child("user_genderPref").child("gender2").exists()){
-                    searchGender = dataSnapshot.child("user_genderPref").child("gender2").getValue(Integer.class);
+                if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).exists()){
+                    searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(String.class);
                     checkGenderSearch(searchGender);
                 }
-                editOld.setText(dataSnapshot.child("user_old").getValue(Integer.class).toString());
-                editBiography.setText(dataSnapshot.child("user_desc").getValue(String.class));
+                editOld.setText(dataSnapshot.child(User.AGE).getValue(Integer.class).toString());
+                editBiography.setText(dataSnapshot.child(User.DESCRIPTION).getValue(String.class));
+                String url = dataSnapshot.child(User.URL_PICTURE).getValue(String.class);
+                Picasso.with(getApplicationContext()).load(url).into(imageView);
             }
 
             @Override
@@ -144,18 +146,15 @@ public class ProfilCustom extends AppCompatActivity {
                     //warningNom.setVisibility(View.VISIBLE);
                     //Toast.makeText(ProfilCustom.this, "Veuillez indiquer votre nom", Toast.LENGTH_SHORT).show();
                 }
+                if(Integer.valueOf(editOld.getText().toString()) <18){
+                    editOld.setError("Il faut avoir minimum 18 ans pour utiliser cette application");
+                }
 
 
                 if(editNom.getText().toString().isEmpty()){
-                    editNom.setError("Veuillez indiquez votre nom");
+                    editNom.setError("Veuillez indiquez votre surnom");
                     //warningNom.setVisibility(View.VISIBLE);
                     //Toast.makeText(ProfilCustom.this, "Veuillez indiquer votre nom", Toast.LENGTH_SHORT).show();
-                }
-
-                if(editPrenom.getText().toString().isEmpty()){
-                    editPrenom.setError("Veuillez indiquez votre Prénom");
-                    //warningPrenom.setVisibility(View.VISIBLE);
-                    //Toast.makeText(ProfilCustom.this, "Veuillez indiquer votre prénom ", Toast.LENGTH_SHORT).show();
                 }
 
                 if(searchMan.isChecked() && searchWoman.isChecked()){
@@ -172,24 +171,36 @@ public class ProfilCustom extends AppCompatActivity {
 
                 }
 
-                if((isMan.isChecked() || isWoman.isChecked()) && (!editPrenom.getText().toString().isEmpty()&& !editPrenom.getText().toString().isEmpty()) && (searchWoman.isChecked() || searchMan.isChecked())) {
+                if((isMan.isChecked() || isWoman.isChecked()) && (searchWoman.isChecked() || searchMan.isChecked())) {
                     try{
-                        databaseFirebase.child("users").child("user" + userUid).child("user_name").setValue(editNom.getText());
+                        DatabaseReference refUser = databaseFirebase.child("users").child(userUid).getRef();
+                        refUser.child(User.NICKNAME).getRef().setValue(editNom.getText().toString());
+                        refUser.child(User.DESCRIPTION).getRef().setValue(editBiography.getText().toString());
+                        if(isMan.isChecked())
+                            refUser.child(User.GENDER).getRef().setValue("gender1");
+                        else
+                            refUser.child(User.GENDER).getRef().setValue("gender2");
+
+                        if(searchMan.isChecked() && searchWoman.isChecked()){
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF1).getRef().setValue("gender1");
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF2).getRef().setValue("gender2");
+                        }
+                        else if(searchMan.isChecked()){
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF1).getRef().setValue("gender1");
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF2).getRef().removeValue();
+                        }
+                        else if(searchWoman.isChecked()){
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF1).getRef().setValue("gender2");
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF2).getRef().removeValue();
+                        }else{
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF1).getRef().removeValue();
+                            refUser.child(User.GENDER_PREF).child(User.GENDER_PREF2).getRef().removeValue();
+                        }
+                        refUser.child(User.AGE).getRef().setValue(Integer.valueOf(editOld.getText().toString()));
                     }catch (Exception e){
                         Toast.makeText(getApplicationContext(),"Erreur",Toast.LENGTH_SHORT).show();
                         String erreur = e.getMessage();
-                        String stop = "stop";
                     }
-
-
-                Toast.makeText(ProfilCustom.this,
-                        "Nom : " + editNom.getText().toString() + ","+
-                        "Prenom : " + editPrenom.getText().toString() + ","+
-                                "Genre :" + genre + ","+
-                                "Recherche :" + recherche
-                        , Toast.LENGTH_SHORT).show();
-
-
 
             }
             }
@@ -266,16 +277,15 @@ public class ProfilCustom extends AppCompatActivity {
     }
 
     void useImage(Uri uri) throws IOException {
-        ImageView imageView = (ImageView) findViewById(R.id.choosePicture);
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
         //use the bitmap as you like
         imageView.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 120, 120, false));
     }
 
-    private void checkGenderSearch(int gender){
-        if(gender == 1)
+    private void checkGenderSearch(String gender){
+        if(gender.equals("gender1"))
             searchMan.setChecked(true);
-        if(gender == 2)
+        if(gender.equals("gender2"))
             searchWoman.setChecked(true);
     }
 }

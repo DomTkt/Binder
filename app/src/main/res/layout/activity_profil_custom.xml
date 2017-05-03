@@ -41,21 +41,21 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/editNom"
-                        android:layout_width="140dp"
+                        android:id="@+id/editNickname"
+                        android:layout_width="match_parent"
                         android:layout_height="45dp"
 
                         android:layout_gravity="center"
-                        android:hint="Nom" />
+                        android:hint="Nickname" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -63,13 +63,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/editPrenom"
-                        android:layout_width="140dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="15dp"
-                        android:hint="Prénom" />
                 </android.support.design.widget.TextInputLayout>
 
 
