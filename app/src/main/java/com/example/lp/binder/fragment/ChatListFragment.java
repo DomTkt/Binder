@@ -152,7 +152,7 @@ public class ChatListFragment extends Fragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.name.setText(listChat.get(position).getUser2().getName());
+            holder.name.setText(listChat.get(position).getUser2().getNickname());
 
 
             return convertView;

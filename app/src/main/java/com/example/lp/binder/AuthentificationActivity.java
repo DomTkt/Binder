@@ -58,7 +58,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
         setContentView(R.layout.activity_authentification);
         ButterKnife.bind(this);
 
-        FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut();
 
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -66,7 +66,9 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AuthentificationActivity.this,MainActivity.class);
+                    AuthentificationActivity.this.startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(),"Sign out",Toast.LENGTH_LONG).show();
                 }
