@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/my_mess_shape"
+    android:id="@+id/mess_ll"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/mess_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:text="blablabla"/>
+
+    <TextView
+        android:id="@+id/mess_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:text="18:50"
+        android:layout_gravity="right"/>
+
+</LinearLayout>

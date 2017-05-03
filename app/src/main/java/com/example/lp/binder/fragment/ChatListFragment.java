@@ -118,21 +118,19 @@ public class ChatListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            Log.d("adapter","getcount");
-            Log.d("getcount",Integer.toString(listChat.size()));
+
             return listChat.size();
         }
 
         @Override
         public Object getItem(int position) {
-            Log.d("adapter","getitem");
+
             return listChat.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            Log.d("adapter","getitemid");
-            Log.d("getitemid",Integer.toString(position));
+
             return position;
         }
 
@@ -140,7 +138,6 @@ public class ChatListFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            Log.d("adapter","getview");
             // reuse views
             ViewHolder holder;
             if (convertView == null) {
