@@ -51,6 +51,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
     private GoogleApiClient googleApiClient;
     private FirebaseUser user;
     private static final int GOOGLE_INTENT_RESULT = 9000;
+    public static final String USER_UID = "userUid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
         setContentView(R.layout.activity_authentification);
         ButterKnife.bind(this);
 
-        FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut();
 
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -66,7 +67,10 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AuthentificationActivity.this,MainActivity.class);
+                    intent.putExtra(USER_UID,user.getUid());
+                    AuthentificationActivity.this.startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(),"Sign out",Toast.LENGTH_LONG).show();
                 }
