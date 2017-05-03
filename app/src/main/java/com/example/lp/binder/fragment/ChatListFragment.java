@@ -21,6 +21,9 @@ import com.example.data.Message;
 import com.example.data.User;
 import com.example.lp.binder.MainActivity;
 import com.example.lp.binder.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +36,8 @@ public class ChatListFragment extends Fragment {
     private ListView lvChat;
     private StableArrayAdapter adapter;
     private MainActivity mainActivity;
+    private User connectedUser;
+    private ArrayList<String> listConvID;
 
 
 
@@ -160,6 +165,41 @@ public class ChatListFragment extends Fragment {
 
     }
 
+    public void convertDatas(){
+
+        connectedUser = new User(null,null,-1,-1,null);
+        listChat = new ArrayList<>();
+        listConvID = new ArrayList<>();
+        mainActivity.databaseFirebase.child("users").child(mainActivity.userUid).getRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //User
+                connectedUser.setNickname(dataSnapshot.child("nickname").getValue(String.class));
+                connectedUser.setAge(dataSnapshot.child("age").getValue(Integer.class));
+
+
+                //Conversation
+                for(int i = 0; i<dataSnapshot.child("conversations").getChildrenCount(); i++){
+                    String id = dataSnapshot.child("conversations").child(Integer.toString(i)).getValue(String.class);
+                    listConvID.add(id);
+                }
+
+                for(int i=0;i<listConvID.size();i++){
+
+                    //Chat chat = new Chat(i,);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
 
 
 }

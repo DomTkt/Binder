@@ -17,6 +17,8 @@ import com.example.lp.binder.fragment.ChatDetailFragment;
 import com.example.lp.binder.fragment.ChatListFragment;
 import com.example.lp.binder.fragment.HomeFragment;
 import com.example.lp.binder.fragment.ProfileDetailsFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,9 +30,11 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DatabaseReference databaseFirebase;
-    String userUid;
+
     String name;
+    public DatabaseReference databaseFirebase;
+    public String userUid;
+    public FirebaseUser user;
 
 
     @Override
@@ -41,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         /*Intent i = new Intent(this, PaymentActivity.class);
         startActivity(i);
 */
+
+        databaseFirebase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userUid = user.getUid();
+        databaseFirebase.child("users").child(userUid).child("test").setValue("test");
+
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override

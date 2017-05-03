@@ -34,6 +34,26 @@ public class User {
 
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public void setGenderPref(List<String> genderPref) {
+        this.genderPref = genderPref;
+    }
+
     public User(String name) {
         this.nickname = name;
     }

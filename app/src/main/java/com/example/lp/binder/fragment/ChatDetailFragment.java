@@ -18,6 +18,10 @@ import com.example.data.Chat;
 import com.example.data.Message;
 import com.example.lp.binder.MainActivity;
 import com.example.lp.binder.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class ChatDetailFragment extends Fragment {
@@ -25,8 +29,10 @@ public class ChatDetailFragment extends Fragment {
     private Chat chat;
     private MainActivity mainActivity;
 
+
     public ChatDetailFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -47,6 +53,8 @@ public class ChatDetailFragment extends Fragment {
             chat = (Chat) getArguments().getSerializable("chat");
 
         }
+
+
     }
 
     @Override
