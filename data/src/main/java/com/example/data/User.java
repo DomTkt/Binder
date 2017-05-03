@@ -29,7 +29,8 @@ public class User {
     public static final String GENDER_PREF2 = "1";
     public static final String URL_PICTURE = "picture";
 
-    public User() {
+    public User(String name) {
+        this.nickname = name;
     }
 
     public User(String nickname, String description, int age, int gender, List<String> genderPref) {
@@ -48,5 +49,25 @@ public class User {
         result.put(GENDER,gender);
         result.put(DESCRIPTION,description);
         return result;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public List<String> getGenderPref() {
+        return genderPref;
     }
 }

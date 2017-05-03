@@ -52,7 +52,7 @@ public class ChatDetailFragment extends Fragment {
         LinearLayout llcontent = (LinearLayout) view.findViewById(R.id.ll_content);
         for(int i=0; i<chat.getConversation().size();i++){
             TextView tv = new TextView(mainActivity);
-            tv.setText(chat.getConversation().get(i).getUserSender().getName() + " : " + chat.getConversation().get(i).getContent());
+            tv.setText(chat.getConversation().get(i).getUserSender().getNickname() + " : " + chat.getConversation().get(i).getContent());
             llcontent.addView(tv);
         }
         return view;

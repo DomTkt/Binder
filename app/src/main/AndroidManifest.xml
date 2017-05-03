@@ -14,9 +14,11 @@
         android:roundIcon="@mipmap/ic_binder"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
 
         </activity>
+
         <activity android:name=".AuthentificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -27,16 +29,15 @@
 
             </intent-filter>
         </activity>
+
+        <activity android:name=".ProfilCustom">
+                
+        </activity>
+
         <activity
             android:name=".PaymentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AuthentificationActivity" />
 
-        </activity>
-        <activity android:name=".PaymentActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-
-</application>
+    </application>
 
 </manifest>
