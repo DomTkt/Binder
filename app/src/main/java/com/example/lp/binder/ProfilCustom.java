@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.data.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +34,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -43,6 +49,7 @@ import butterknife.ButterKnife;
 public class ProfilCustom extends AppCompatActivity {
 
     int requestCodeSelectPicture = 1;
+    private Uri uri;
     @BindView(R.id.iv_back_account) ImageView back;
     @BindView(R.id.isWoman) CheckBox isWoman;
     @BindView(R.id.isMan) CheckBox isMan;
@@ -66,6 +73,7 @@ public class ProfilCustom extends AppCompatActivity {
     private String userUid;
     private FirebaseUser user;
     private boolean firstTime = false;
+    private StorageReference mStorageRef;
 
 
     @Override
@@ -75,6 +83,7 @@ public class ProfilCustom extends AppCompatActivity {
         ButterKnife.bind(this);
 
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userUid = user.getUid();
         databaseFirebase.child("users").child(userUid).child("test").setValue("test");
@@ -188,6 +197,7 @@ public class ProfilCustom extends AppCompatActivity {
                 if((isMan.isChecked() || isWoman.isChecked()) && (searchWoman.isChecked() || searchMan.isChecked())) {
                     try{
                         DatabaseReference refUser = databaseFirebase.child("users").child(userUid).getRef();
+                        refUser.child("test").getRef().removeValue();
                         refUser.child(User.NICKNAME).getRef().setValue(editNom.getText().toString());
                         refUser.child(User.DESCRIPTION).getRef().setValue(editBiography.getText().toString());
                         if(isMan.isChecked())
@@ -210,9 +220,10 @@ public class ProfilCustom extends AppCompatActivity {
                             refUser.child(User.GENDER_PREF).child(User.GENDER_PREF1).getRef().removeValue();
                             refUser.child(User.GENDER_PREF).child(User.GENDER_PREF2).getRef().removeValue();
                         }
+                        uploadPicture();
                         refUser.child(User.AGE).getRef().setValue(Integer.valueOf(editOld.getText().toString()));
                         firstTime = false;
-                        databaseFirebase.child("users").child(userUid).child("test").getRef().removeValue();
+
                     }catch (Exception e){
                         Toast.makeText(getApplicationContext(),"Erreur",Toast.LENGTH_SHORT).show();
                         String erreur = e.getMessage();
@@ -279,7 +290,7 @@ public class ProfilCustom extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (intent != null) {
                     // Get the URI of the selected file
-                    final Uri uri = intent.getData();
+                    uri = intent.getData();
                     try {
                         useImage(uri);
                     } catch (IOException e) {
@@ -308,5 +319,25 @@ public class ProfilCustom extends AppCompatActivity {
     private void initNoteUser(DataSnapshot dataSnapshot){
         dataSnapshot.child(User.NICKNAME).getRef().setValue(user.getDisplayName());
         dataSnapshot.child(User.URL_PICTURE).getRef().setValue(user.getPhotoUrl().toString());
+    }
+
+    private void uploadPicture(){
+        StorageReference riversRef = mStorageRef.child("images/" + userUid + "/profilePicture.");
+        riversRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        String url = taskSnapshot.getDownloadUrl().toString();
+                        databaseFirebase.child("users").child(userUid).child(User.URL_PICTURE).getRef().setValue(url);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
     }
 }
