@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.example.data.Chat;
 import com.example.data.Message;
 import com.example.data.User;
-import com.example.lp.binder.ChatActivity;
 import com.example.lp.binder.MainActivity;
 import com.example.lp.binder.R;
 

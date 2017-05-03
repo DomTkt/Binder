@@ -22,9 +22,7 @@
             android:name=".PaymentActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AuthentificationActivity" />
-        <activity android:name=".ChatActivity">
 
-        </activity>
     </application>
 
 </manifest>
