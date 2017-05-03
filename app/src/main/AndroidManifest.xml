@@ -14,13 +14,14 @@
         <activity android:name=".MainActivity">
 
         </activity>
-        <activity android:name=".PaymentActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".AuthentificationActivity">
+        <activity android:name=".AuthentificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
         <activity
@@ -28,6 +29,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AuthentificationActivity" />
 
-    </application>
+        </activity>
+        <activity android:name=".PaymentActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+
+</application>
 
 </manifest>

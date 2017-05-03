@@ -23,53 +23,85 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ProfilCustom extends AppCompatActivity {
 
     int requestCodeSelectPicture = 1;
-    private ImageView back;
-    private CheckBox isWoman;
-    private CheckBox isMan;
-    private CheckBox searchWoman;
-    private CheckBox searchMan;
-    private ImageView warningSexe;
-    private ImageView warningSearch;
+    @BindView(R.id.iv_back_account) ImageView back;
+    @BindView(R.id.isWoman) CheckBox isWoman;
+    @BindView(R.id.isMan) CheckBox isMan;
+    @BindView(R.id.searchWoman) CheckBox searchWoman;
+    @BindView(R.id.searchMan) CheckBox searchMan;
+    @BindView(R.id.warningSexe) ImageView warningSexe;
+    @BindView(R.id.warningSearch) ImageView warningSearch;
     private ImageView warningNom;
     private ImageView warningPrenom;
     private TextView locationUser;
 
 
-    private Button submit;
-    private EditText editNom;
-    private EditText editPrenom;
-    private EditText editOld;
+    @BindView(R.id.submit_account) Button submit;
+    @BindView(R.id.editNom) EditText editNom;
+    @BindView(R.id.editPrenom) EditText editPrenom;
+    @BindView(R.id.editAge) EditText editOld;
+    @BindView(R.id.editBiography) EditText editBiography;
     private String genre;
     private String recherche;
+    private DatabaseReference databaseFirebase;
+    private String userUid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil_custom);
+        ButterKnife.bind(this);
 
+        databaseFirebase = FirebaseDatabase.getInstance().getReference();
+        if( getIntent() != null)
+            userUid = getIntent().getStringExtra(AuthentificationActivity.USER_UID);
+        userUid = "1";
+        databaseFirebase.child("users").child("user" + userUid).getRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                editNom.setText(dataSnapshot.child("user_name").getValue(String.class));
+                editPrenom.setText(dataSnapshot.child("user_firstName").getValue(String.class));
+                int gender = dataSnapshot.child("user_gender").getValue(Integer.class);
+                if(gender == 1) {
+                    isMan.setChecked(true);
+                    genre = isMan.getText().toString();
+                }
+                else{
+                    isWoman.setChecked(true);
+                    genre = isWoman.getText().toString();
+                }
 
-        editOld = (EditText) findViewById(R.id.editAge);
-        isWoman = (CheckBox) findViewById(R.id.isWoman);
-        isMan = (CheckBox) findViewById(R.id.isMan);
-        searchWoman = (CheckBox) findViewById(R.id.searchWoman);
-        searchMan = (CheckBox) findViewById(R.id.searchMan);
-        warningSearch = (ImageView) findViewById(R.id.warningSearch);
-        warningSexe = (ImageView) findViewById(R.id.warningSexe);
+                int searchGender = dataSnapshot.child("user_genderPref").child("gender1").getValue(Integer.class);
+                checkGenderSearch(searchGender);
+                if(dataSnapshot.child("user_genderPref").child("gender2").exists()){
+                    searchGender = dataSnapshot.child("user_genderPref").child("gender2").getValue(Integer.class);
+                    checkGenderSearch(searchGender);
+                }
+                editOld.setText(dataSnapshot.child("user_old").getValue(Integer.class).toString());
+                editBiography.setText(dataSnapshot.child("user_desc").getValue(String.class));
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        editNom = (EditText) findViewById(R.id.editNom);
-        editPrenom = (EditText) findViewById(R.id.editPrenom);
-        locationUser = (TextView) findViewById(R.id.locationUser);
-
-
+            }
+        });
 
         Geocoder gcd=new Geocoder(getBaseContext(), Locale.getDefault());
 
@@ -87,9 +119,6 @@ public class ProfilCustom extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        submit = (Button) findViewById(R.id.submit_account);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +173,13 @@ public class ProfilCustom extends AppCompatActivity {
                 }
 
                 if((isMan.isChecked() || isWoman.isChecked()) && (!editPrenom.getText().toString().isEmpty()&& !editPrenom.getText().toString().isEmpty()) && (searchWoman.isChecked() || searchMan.isChecked())) {
+                    try{
+                        databaseFirebase.child("users").child("user" + userUid).child("user_name").setValue(editNom.getText());
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(),"Erreur",Toast.LENGTH_SHORT).show();
+                        String erreur = e.getMessage();
+                        String stop = "stop";
+                    }
 
 
                 Toast.makeText(ProfilCustom.this,
@@ -179,10 +215,6 @@ public class ProfilCustom extends AppCompatActivity {
                 genre = isMan.getText().toString();
             }
         });
-
-
-
-        back = (ImageView) findViewById(R.id.iv_back_account);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,5 +270,12 @@ public class ProfilCustom extends AppCompatActivity {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
         //use the bitmap as you like
         imageView.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 120, 120, false));
+    }
+
+    private void checkGenderSearch(int gender){
+        if(gender == 1)
+            searchMan.setChecked(true);
+        if(gender == 2)
+            searchWoman.setChecked(true);
     }
 }

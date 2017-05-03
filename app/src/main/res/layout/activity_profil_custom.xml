@@ -15,29 +15,29 @@
 
 
     <LinearLayout
+        android:id="@+id/llGlobal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
 
-        android:id="@+id/llGlobal">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <ImageView
+            android:id="@+id/choosePicture"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@mipmap/choose_picture"
-            android:layout_marginTop="25dp"
             android:layout_gravity="center"
-            android:id="@+id/choosePicture"
-            />
+            android:layout_marginTop="25dp"
+            android:src="@mipmap/choose_picture" />
 
         <LinearLayout
+            android:id="@+id/llForm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+
             android:layout_marginTop="20dp"
-
-
-            android:id="@+id/llForm"
             android:orientation="vertical">
 
             <LinearLayout
@@ -48,120 +48,110 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <EditText
+                        android:id="@+id/editNom"
                         android:layout_width="140dp"
                         android:layout_height="45dp"
-                        android:hint="Nom"
 
                         android:layout_gravity="center"
-                        android:id="@+id/editNom"/>
+                        android:hint="Nom" />
                 </android.support.design.widget.TextInputLayout>
 
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="140dp"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="15dp"
-                    android:hint="Prénom"
-                    android:layout_gravity="center"
-                    android:id="@+id/editPrenom"/>
-            </android.support.design.widget.TextInputLayout>
-
+                    <EditText
+                        android:id="@+id/editPrenom"
+                        android:layout_width="140dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:hint="Prénom" />
+                </android.support.design.widget.TextInputLayout>
 
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llChoix"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:id="@+id/llChoix">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Years/old   "/>
 
-                    <EditText
-                        android:layout_marginLeft="35dp"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="Years/old   "
+                        android:textSize="20dp" />
+
+                    <EditText
                         android:id="@+id/editAge"
-                        android:inputType="number"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:inputType="number" />
 
-                    </LinearLayout>
-
-
-
-
-
-
-
+                </LinearLayout>
 
 
             </LinearLayout>
 
 
-
-
-
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:layout_marginRight="20dp"
-                    android:textSize="20dp"
-                    android:text="Gender : "/>
+                    android:layout_marginTop="4dp"
+                    android:text="Gender : "
+                    android:textSize="20dp" />
 
                 <CheckBox
+                    android:id="@+id/isMan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/isMan"
-                    android:text="Man"/>
+                    android:text="Man" />
 
                 <CheckBox
+                    android:id="@+id/isWoman"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/isWoman"
-                    android:text="Woman"/>
+                    android:text="Woman" />
 
                 <ImageView
                     android:id="@+id/warningSexe"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="10dp"
-                    android:visibility="gone"
-                    android:src="@drawable/warning"/>
+                    android:src="@drawable/warning"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
 
-
             <LinearLayout
-                android:layout_marginTop="20dp"
+                android:id="@+id/llCherche"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:id="@+id/llCherche">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -174,52 +164,72 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/searchMan"
-                    android:text="Man"/>
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:id="@+id/searchWoman"
-                    android:text="Woman"/>
+                    <CheckBox
+                        android:id="@+id/searchMan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Man" />
+
+                    <CheckBox
+                        android:id="@+id/searchWoman"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Woman" />
 
                     <ImageView
                         android:id="@+id/warningSearch"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_margin="10dp"
-                        android:visibility="gone"
-                        android:src="@drawable/warning"/>
+                        android:src="@drawable/warning"
+                        android:visibility="gone" />
 
-               </LinearLayout>
-
+                </LinearLayout>
 
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="Location : "
-                    android:textSize="20dp"/>
+                    android:textSize="20dp" />
 
                 <TextView
-                    android:layout_marginTop="20dp"
+                    android:id="@+id/locationUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/locationUser"
+                    android:layout_marginTop="20dp"
                     android:text="Location"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/editBiography"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:hint="Biography"
+                        android:maxLines="2" />
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -228,12 +238,11 @@
 
         <Button
             android:id="@+id/submit_account"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:background="@drawable/validate"
-            />
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/validate" />
 
     </LinearLayout>
 
