@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.data.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,6 +64,8 @@ public class ProfilCustom extends AppCompatActivity {
     private String recherche;
     private DatabaseReference databaseFirebase;
     private String userUid;
+    private FirebaseUser user;
+    private boolean firstTime = false;
 
 
     @Override
@@ -72,31 +75,41 @@ public class ProfilCustom extends AppCompatActivity {
         ButterKnife.bind(this);
 
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
-        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userUid = user.getUid();
+        userUid = "87888456";
+        databaseFirebase.child("users").child(userUid).child("test").setValue("test");
         databaseFirebase.child("users").child(userUid).getRef().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                editNom.setText(dataSnapshot.child(User.NICKNAME).getValue(String.class));
-                String gender = dataSnapshot.child(User.GENDER).getValue(String.class);
-                if(gender.equals("gender1")) {
-                    isMan.setChecked(true);
-                    genre = isMan.getText().toString();
+                if(dataSnapshot.child("test").exists()){
+                    firstTime = true;
+                    editNom.setText(user.getDisplayName());
+                    Picasso.with(getApplicationContext()).load(user.getPhotoUrl().toString()).into(imageView);
                 }
                 else{
-                    isWoman.setChecked(true);
-                    genre = isWoman.getText().toString();
+                    if(!firstTime){
+                        String gender = dataSnapshot.child(User.GENDER).getValue(String.class);
+                        if(gender.equals("gender1")) {
+                            isMan.setChecked(true);
+                            genre = isMan.getText().toString();
+                        }else{
+                            isWoman.setChecked(true);
+                            genre = isWoman.getText().toString();
+                        }
+                        String searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).getValue(String.class);
+                        checkGenderSearch(searchGender);
+                        if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).exists()){
+                            searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(String.class);
+                            checkGenderSearch(searchGender);
+                        }
+                        editOld.setText(dataSnapshot.child(User.AGE).getValue(Integer.class).toString());
+                        editBiography.setText(dataSnapshot.child(User.DESCRIPTION).getValue(String.class));
+                    }
+                    editNom.setText(dataSnapshot.child(User.NICKNAME).getValue(String.class));
+                    String url = dataSnapshot.child(User.URL_PICTURE).getValue(String.class);
+                    Picasso.with(getApplicationContext()).load(url).into(imageView);
                 }
-
-                String searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).getValue(String.class);
-                checkGenderSearch(searchGender);
-                if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).exists()){
-                    searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(String.class);
-                    checkGenderSearch(searchGender);
-                }
-                editOld.setText(dataSnapshot.child(User.AGE).getValue(Integer.class).toString());
-                editBiography.setText(dataSnapshot.child(User.DESCRIPTION).getValue(String.class));
-                String url = dataSnapshot.child(User.URL_PICTURE).getValue(String.class);
-                Picasso.with(getApplicationContext()).load(url).into(imageView);
             }
 
             @Override
@@ -197,6 +210,8 @@ public class ProfilCustom extends AppCompatActivity {
                             refUser.child(User.GENDER_PREF).child(User.GENDER_PREF2).getRef().removeValue();
                         }
                         refUser.child(User.AGE).getRef().setValue(Integer.valueOf(editOld.getText().toString()));
+                        firstTime = false;
+                        databaseFirebase.child("users").child(userUid).child("test").getRef().removeValue();
                     }catch (Exception e){
                         Toast.makeText(getApplicationContext(),"Erreur",Toast.LENGTH_SHORT).show();
                         String erreur = e.getMessage();
@@ -287,5 +302,10 @@ public class ProfilCustom extends AppCompatActivity {
             searchMan.setChecked(true);
         if(gender.equals("gender2"))
             searchWoman.setChecked(true);
+    }
+
+    private void initNoteUser(DataSnapshot dataSnapshot){
+        dataSnapshot.child(User.NICKNAME).getRef().setValue(user.getDisplayName());
+        dataSnapshot.child(User.URL_PICTURE).getRef().setValue(user.getPhotoUrl().toString());
     }
 }

@@ -13,11 +13,11 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class User {
-    public String nickname;
-    public String description;
-    public int age;
-    public int gender;
-    public List<String> genderPref;
+    private String nickname;
+    private String description;
+    private int age;
+    private int gender;
+    private List<String> genderPref;
 
     //Firebase field contnte
     public static final String NICKNAME = "nickname";
@@ -28,6 +28,11 @@ public class User {
     public static final String GENDER_PREF1 = "0";
     public static final String GENDER_PREF2 = "1";
     public static final String URL_PICTURE = "picture";
+    public static final String CONVERSATIONS = "conversations";
+
+    public  User(){
+
+    }
 
     public User(String name) {
         this.nickname = name;
