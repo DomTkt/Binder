@@ -12,9 +12,12 @@
     <string name="text_button_signin">Sign in</string>
     <string name="text_button_signup">Sign up</string>
     <string name="text_view_other_signin">Other sign in</string>
-        //Error
+    //Error
     <string name="error_email_non_compliant">Email non-compliant</string>
     <string name="error_password_lenght">Passwords should be at least 6 characters in length</string>
     <string name="error_password_empty">Password can not empty</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
