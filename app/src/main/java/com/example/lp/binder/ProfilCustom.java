@@ -77,15 +77,16 @@ public class ProfilCustom extends AppCompatActivity {
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userUid = user.getUid();
-        userUid = "87888456";
         databaseFirebase.child("users").child(userUid).child("test").setValue("test");
         databaseFirebase.child("users").child(userUid).getRef().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child("test").exists()){
                     firstTime = true;
-                    editNom.setText(user.getDisplayName());
-                    Picasso.with(getApplicationContext()).load(user.getPhotoUrl().toString()).into(imageView);
+                    if(user.getProviders().get(0).equals("google.com")){
+                        editNom.setText(user.getDisplayName());
+                        Picasso.with(getApplicationContext()).load(user.getPhotoUrl().toString()).into(imageView);
+                    }
                 }
                 else{
                     if(!firstTime){
