@@ -30,7 +30,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ProfilCustom">
+        <activity android:name=".ProfilCustom"
+            android:screenOrientation="portrait">
                 
         </activity>
 

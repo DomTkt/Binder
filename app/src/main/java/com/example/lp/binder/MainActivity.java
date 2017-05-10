@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userUid = user.getUid();
-        databaseFirebase.child("users").child(userUid).child("test").setValue("test");
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {

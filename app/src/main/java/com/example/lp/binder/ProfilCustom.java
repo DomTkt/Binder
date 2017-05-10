@@ -16,6 +16,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -50,7 +52,6 @@ public class ProfilCustom extends AppCompatActivity {
 
     int requestCodeSelectPicture = 1;
     private Uri uri;
-    @BindView(R.id.iv_back_account) ImageView back;
     @BindView(R.id.isWoman) CheckBox isWoman;
     @BindView(R.id.isMan) CheckBox isMan;
     @BindView(R.id.searchWoman) CheckBox searchWoman;
@@ -72,7 +73,6 @@ public class ProfilCustom extends AppCompatActivity {
     private DatabaseReference databaseFirebase;
     private String userUid;
     private FirebaseUser user;
-    private boolean firstTime = false;
     private StorageReference mStorageRef;
 
 
@@ -80,45 +80,51 @@ public class ProfilCustom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil_custom);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
         mStorageRef = FirebaseStorage.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userUid = user.getUid();
-        databaseFirebase.child("users").child(userUid).child("test").setValue("test");
+        readDataFromFirebase();
         databaseFirebase.child("users").child(userUid).getRef().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("test").exists()){
-                    firstTime = true;
+                if(!dataSnapshot.exists()){
                     if(user.getProviders().get(0).equals("google.com")){
-                        editNom.setText(user.getDisplayName());
-                        Picasso.with(getApplicationContext()).load(user.getPhotoUrl().toString()).into(imageView);
+                        dataSnapshot.child(User.NICKNAME).getRef().setValue(user.getDisplayName());
+                        dataSnapshot.child(User.URL_PICTURE).getRef().setValue(user.getPhotoUrl().toString());
                     }
                 }
-                else{
-                    if(!firstTime){
-                        String gender = dataSnapshot.child(User.GENDER).getValue(String.class);
-                        if(gender.equals("gender1")) {
-                            isMan.setChecked(true);
-                            genre = isMan.getText().toString();
-                        }else{
-                            isWoman.setChecked(true);
-                            genre = isWoman.getText().toString();
-                        }
+                if(dataSnapshot.child(User.NICKNAME).exists()){
+                    editNom.setText(dataSnapshot.child(User.NICKNAME).getValue(String.class));
+                }
+                if(dataSnapshot.child(User.AGE).exists()) {
+                    editOld.setText(dataSnapshot.child(User.AGE).getValue(Integer.class).toString());
+                }
+                if(dataSnapshot.child(User.DESCRIPTION).exists()) {
+                    editBiography.setText(dataSnapshot.child(User.DESCRIPTION).getValue(String.class));
+                }
+                if(dataSnapshot.child(User.GENDER).exists()) {
+                    String gender = dataSnapshot.child(User.GENDER).getValue(String.class);
+                    if(gender.equals("gender1")) {
+                        isMan.setChecked(true);
+                        genre = isMan.getText().toString();
+                    }else{
+                        isWoman.setChecked(true);
+                        genre = isWoman.getText().toString();
+                    }
+                }
+                if(dataSnapshot.child(User.GENDER_PREF).exists()) {
+                    if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).exists()) {
                         String searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).getValue(String.class);
                         checkGenderSearch(searchGender);
-                        if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).exists()){
-                            searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(String.class);
-                            checkGenderSearch(searchGender);
-                        }
-                        editOld.setText(dataSnapshot.child(User.AGE).getValue(Integer.class).toString());
-                        editBiography.setText(dataSnapshot.child(User.DESCRIPTION).getValue(String.class));
                     }
-                    editNom.setText(dataSnapshot.child(User.NICKNAME).getValue(String.class));
-                    String url = dataSnapshot.child(User.URL_PICTURE).getValue(String.class);
-                    Picasso.with(getApplicationContext()).load(url).into(imageView);
+                    if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).exists()) {
+                        String searchGender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(String.class);
+                        checkGenderSearch(searchGender);
+                    }
                 }
             }
 
@@ -166,8 +172,6 @@ public class ProfilCustom extends AppCompatActivity {
 
                 if(editOld.getText().toString().isEmpty()){
                     editOld.setError("Veuillez indiquez votre Age");
-                    //warningNom.setVisibility(View.VISIBLE);
-                    //Toast.makeText(ProfilCustom.this, "Veuillez indiquer votre nom", Toast.LENGTH_SHORT).show();
                 }
                 if(Integer.valueOf(editOld.getText().toString()) <18){
                     editOld.setError("Il faut avoir minimum 18 ans pour utiliser cette application");
@@ -197,7 +201,6 @@ public class ProfilCustom extends AppCompatActivity {
                 if((isMan.isChecked() || isWoman.isChecked()) && (searchWoman.isChecked() || searchMan.isChecked())) {
                     try{
                         DatabaseReference refUser = databaseFirebase.child("users").child(userUid).getRef();
-                        refUser.child("test").getRef().removeValue();
                         refUser.child(User.NICKNAME).getRef().setValue(editNom.getText().toString());
                         refUser.child(User.DESCRIPTION).getRef().setValue(editBiography.getText().toString());
                         if(isMan.isChecked())
@@ -222,7 +225,6 @@ public class ProfilCustom extends AppCompatActivity {
                         }
                         uploadPicture();
                         refUser.child(User.AGE).getRef().setValue(Integer.valueOf(editOld.getText().toString()));
-                        firstTime = false;
 
                     }catch (Exception e){
                         Toast.makeText(getApplicationContext(),"Erreur",Toast.LENGTH_SHORT).show();
@@ -254,13 +256,6 @@ public class ProfilCustom extends AppCompatActivity {
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProfilCustom.super.onBackPressed();
-            }
-        });
-
         ImageView imageView = (ImageView) findViewById(R.id.choosePicture);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,15 +268,6 @@ public class ProfilCustom extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
-
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -316,28 +302,56 @@ public class ProfilCustom extends AppCompatActivity {
             searchWoman.setChecked(true);
     }
 
-    private void initNoteUser(DataSnapshot dataSnapshot){
-        dataSnapshot.child(User.NICKNAME).getRef().setValue(user.getDisplayName());
-        dataSnapshot.child(User.URL_PICTURE).getRef().setValue(user.getPhotoUrl().toString());
-    }
 
     private void uploadPicture(){
-        StorageReference riversRef = mStorageRef.child("images/" + userUid + "/profilePicture.");
-        riversRef.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        String url = taskSnapshot.getDownloadUrl().toString();
-                        databaseFirebase.child("users").child(userUid).child(User.URL_PICTURE).getRef().setValue(url);
+        if(uri != null){
+            StorageReference riversRef = mStorageRef.child("images/" + userUid + "/profilePicture.");
+            riversRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            String url = taskSnapshot.getDownloadUrl().toString();
+                            databaseFirebase.child("users").child(userUid).child(User.URL_PICTURE).getRef().setValue(url);
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    // ...
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void readDataFromFirebase(){
+        databaseFirebase.child("users").child(userUid).child(User.URL_PICTURE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    String url = dataSnapshot.getValue(String.class);
+                    Picasso.with(getBaseContext()).load(url).resize(imageView.getHeight(),imageView.getWidth()).into(imageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
