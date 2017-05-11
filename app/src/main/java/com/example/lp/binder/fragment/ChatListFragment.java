@@ -15,18 +15,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.data.Chat;
 import com.example.data.Message;
 import com.example.data.User;
 import com.example.lp.binder.MainActivity;
 import com.example.lp.binder.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -38,6 +42,7 @@ public class ChatListFragment extends Fragment {
     private MainActivity mainActivity;
     private User connectedUser;
     private ArrayList<String> listConvID;
+    private ArrayList<User> listUserConv;
 
 
 
@@ -75,15 +80,16 @@ public class ChatListFragment extends Fragment {
             ArrayList<Message> list = new ArrayList<>();
             for(int j=0; j<10;j++){
                 Date date = new Date();
-                Message mess = new Message(j+(i*20),date,us2,"blablabla"+(j+(i*20)));
-                Message mess2 = new Message(j+(i*20),date,us1,"blablabla"+(j+(i*20)));
+                Message mess = new Message(Integer.toString(j+(i*20)),date,us2,"blablabla"+(j+(i*20)));
+                Message mess2 = new Message(Integer.toString(j+(i*20)),date,us1,"blablabla"+(j+(i*20)));
                 list.add(mess);
                 list.add(mess2);
             }
-            Chat chat = new Chat(i,us1,us2,list);
+            Chat chat = new Chat(Integer.toString(i),us1,us2,list);
             listChat.add(chat);
         }
 
+        convertDatas();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
         lvChat = (ListView) view.findViewById(R.id.lv_chat);
@@ -170,25 +176,23 @@ public class ChatListFragment extends Fragment {
         connectedUser = new User(null,null,-1,-1,null);
         listChat = new ArrayList<>();
         listConvID = new ArrayList<>();
+        listUserConv = new ArrayList<>();
+        connectedUser.setId(mainActivity.userUid);
+
         mainActivity.databaseFirebase.child("users").child(mainActivity.userUid).getRef().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //User
                 connectedUser.setNickname(dataSnapshot.child("nickname").getValue(String.class));
                 connectedUser.setAge(dataSnapshot.child("age").getValue(Integer.class));
-
+                Log.d(ChatListFragment.class.getName(),"userid = "+mainActivity.userUid);
 
                 //Conversation
                 for(int i = 0; i<dataSnapshot.child("conversations").getChildrenCount(); i++){
                     String id = dataSnapshot.child("conversations").child(Integer.toString(i)).getValue(String.class);
                     listConvID.add(id);
                 }
-
-                for(int i=0;i<listConvID.size();i++){
-
-                    //Chat chat = new Chat(i,);
-                }
-
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -198,6 +202,85 @@ public class ChatListFragment extends Fragment {
             }
         });
 
+        mainActivity.databaseFirebase.child("users").getRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(listConvID != null ){
+                    if(listConvID.size()>0){
+                        for(int i=0 ; i<listConvID.size();i++){
+                            for (Iterator<DataSnapshot> usersIter = dataSnapshot.getChildren().iterator(); usersIter.hasNext();){
+                                DataSnapshot ds = usersIter.next();
+                                if(ds.hasChild("conversations")){
+                                    for (Iterator<DataSnapshot> convsIter = ds.child("conversations").getChildren().iterator(); convsIter.hasNext();){
+                                        DataSnapshot convds = convsIter.next();
+                                        if(convds.getValue(String.class).equals(listConvID.get(i)) && !ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                                            User other = new User();
+                                            other.setNickname(ds.child("nickname").getValue(String.class));
+                                            other.setId(ds.getKey());
+                                            listUserConv.add(other);
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                    }else{
+                        Toast.makeText(mainActivity,"Vous n'avez pas de conversations", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(mainActivity,"Vous n'avez pas de conversations", Toast.LENGTH_SHORT).show();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        mainActivity.databaseFirebase.child("conversations").getRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(listConvID != null ){
+                    if(listConvID.size()>0){
+                        listChat.clear();
+                        for(int i=0 ; i<listConvID.size();i++){
+                            ArrayList<Message> mess = new ArrayList<>();
+                            for (Iterator<DataSnapshot> messIter = dataSnapshot.child(listConvID.get(i)).child("messages").getChildren().iterator(); messIter.hasNext();){
+                                DataSnapshot ds = messIter.next();
+                                User sender;
+                                if(ds.child("userId").getValue(String.class).equals(connectedUser.getId())){
+                                    sender = connectedUser;
+                                }else{
+                                    sender = listUserConv.get(i);
+                                }
+                                Message message = new Message(ds.getKey(),new Date(Long.valueOf(ds.child("timestamp").getValue(String.class))),sender,ds.child("content").getValue(String.class));
+                                mess.add(message);
+                            }
+                            Chat chat = new Chat(listConvID.get(i),connectedUser,listUserConv.get(i),mess);
+                            listChat.add(chat);
+
+                        }
+
+                    }else{
+                        Toast.makeText(mainActivity,"Vous n'avez pas de conversations", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(mainActivity,"Vous n'avez pas de conversations", Toast.LENGTH_SHORT).show();
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

@@ -100,6 +100,6 @@ public class ChatDetailFragment extends Fragment {
 
 
     public boolean isMyMess(Message mess){
-        return mess.getUserSender().getNickname().equals("jean");
+        return mess.getUserSender().getId().equals(mainActivity.userUid);
     }
 }

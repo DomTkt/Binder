@@ -9,23 +9,23 @@ import java.util.ArrayList;
  */
 
 public class Chat implements Serializable {
-    private int id;
+    private String id;
     private User user1;
     private User user2;
     private ArrayList<Message> conversation;
 
-    public Chat(int id, User user1, User user2, ArrayList<Message> conversation) {
+    public Chat(String id, User user1, User user2, ArrayList<Message> conversation) {
         this.id = id;
         this.user1 = user1;
         this.user2 = user2;
         this.conversation = conversation;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

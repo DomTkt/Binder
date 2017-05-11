@@ -7,23 +7,23 @@ import java.util.Date;
  */
 
 public class Message {
-    private int id;
+    private String id;
     private Date time;
     private User userSender;
     private String content;
 
-    public Message(int id, Date time, User userSender, String content) {
+    public Message(String id, Date time, User userSender, String content) {
         this.id = id;
         this.time = time;
         this.userSender = userSender;
         this.content = content;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
