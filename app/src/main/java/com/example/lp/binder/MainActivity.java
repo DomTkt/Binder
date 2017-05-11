@@ -17,6 +17,7 @@ import com.example.lp.binder.fragment.ChatDetailFragment;
 import com.example.lp.binder.fragment.ChatListFragment;
 import com.example.lp.binder.fragment.HomeFragment;
 import com.example.lp.binder.fragment.ProfileDetailsFragment;
+import com.example.lp.binder.fragment.SettingsFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = ChatListFragment.newInstance();
                         break;
                     case R.id.tab_setting:
-
+                        fragment =  SettingsFragment.newInstance();
                         break;
                     case R.id.tab_account:
                         fragment = ProfileDetailsFragment.newInstance();
