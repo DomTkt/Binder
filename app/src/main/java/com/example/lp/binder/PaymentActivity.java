@@ -1,6 +1,7 @@
 package com.example.lp.binder;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,15 +10,32 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+
+
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.exception.AuthenticationException;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.regex.Pattern;
 
+import static android.R.attr.data;
 import static java.security.AccessController.getContext;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -33,6 +51,7 @@ public class PaymentActivity extends AppCompatActivity {
     private EditText etCVC;
     private Context ctx;
     private ImageView back;
+    private String tok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +147,21 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     public void createToken(Card card) throws AuthenticationException {
-        Stripe stripe = new Stripe(ctx, "PUBLIC KEY");
+        Stripe stripe = new Stripe(ctx, "pk_test_duyer4UlMe33noGxo2jYayuY");
         stripe.createToken(
                 card,
                 new TokenCallback() {
                     public void onSuccess(Token token) {
+
+                        tok = token.getId();
+                        System.out.println("tok = " + tok);
+
+                        AsyncPay asyncPay = new AsyncPay();
+                        asyncPay.execute(this);
+                        // Send POST data request
+
+
+
                         // Send token to your server
                     }
                     public void onError(Exception error) {
@@ -142,4 +171,45 @@ public class PaymentActivity extends AppCompatActivity {
                 }
         );
     }
+
+private void connectForPay(){
+
+    URL url = null;
+    try {
+        url = new URL("http://lucien.appsolute-preprod.fr/stripe/charge_user.php");
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        JSONObject jsonBody = new JSONObject();
+        jsonBody.put("stripeToken",tok);
+        jsonBody.put("stripeAmount","1000");
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-type", "application/json");
+        connection.setDoOutput(true);
+
+
+                            DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
+                            dStream.writeBytes(URLEncoder.encode(jsonBody.toString(),"UTF-8"));
+                            dStream.flush();
+                            dStream.close();
+    } catch (MalformedURLException e) {
+        e.printStackTrace();
+    } catch (ProtocolException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+
+
+}
+
+    public class AsyncPay extends AsyncTask<Object, Integer, String[]> {
+
+        @Override
+        protected String[] doInBackground(Object... params) {
+                connectForPay();
+            return new String[0];
+        }
+    }
+
 }

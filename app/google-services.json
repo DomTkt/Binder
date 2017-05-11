@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "482707168880-527oqqv2poudkkmnid15a0kmrpdtm2ii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lp.binder",
+            "certificate_hash": "f2c220345e86c1a089c43a4325e3590210994c9e"
+          }
+        },
+        {
           "client_id": "482707168880-cs26u0gf241fo7lq1ola4j49vcstj1o5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -39,6 +47,13 @@
         "appinvite_service": {
           "status": 2,
           "other_platform_oauth_client": [
+            {
+              "client_id": "482707168880-bpqtlvgtna885sp27ie1b3aeulipmsod.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "fr.univ-lyon1.Binder"
+              }
+            },
             {
               "client_id": "482707168880-5fk8mt7ogb0e653rtr5d3bio49t12omg.apps.googleusercontent.com",
               "client_type": 3

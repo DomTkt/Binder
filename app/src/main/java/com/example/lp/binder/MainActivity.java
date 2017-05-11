@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         databaseFirebase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userUid = user.getUid();
-        databaseFirebase.child("users").child(userUid).child("test").setValue("test");
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -77,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                 }
 
-                if (tabId == R.id.tab_account) {
-                    System.out.println("TAB ACCOUNT");
-                   Intent i  = new Intent(MainActivity.this, ProfilCustom.class);
-                    startActivity(i);
-                }
+//                if (tabId == R.id.tab_account) {
+//                    System.out.println("TAB ACCOUNT");
+//                    Intent i  = new Intent(MainActivity.this, ProfilCustom.class);
+//                    startActivity(i);
+//                }
             }
         });
     }

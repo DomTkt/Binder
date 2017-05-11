@@ -119,7 +119,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(),"Error",
+                                Toast.makeText(getApplicationContext(),"Vous n'avez pas de compte cliquer sur SIGN UP",
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -192,7 +192,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                         });
 
             } else {
-                Toast.makeText(getApplicationContext(),"Error",
+                Toast.makeText(getApplicationContext(),"Nous avons pas pu vous connecter avec votre compte google",
                         Toast.LENGTH_SHORT).show();
             }
         }
