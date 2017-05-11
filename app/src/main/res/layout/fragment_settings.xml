@@ -78,10 +78,14 @@
         android:layout_height="wrap_content"
         android:text="show ages :"/>
 
-    <com.edmodo.rangebar.RangeBar
+    <com.appyvet.rangebar.RangeBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        custom:tickCount= "100"
+        custom:thickStart="18"
+        custom:thickEnd="100"
+        custom:thickInterval="1"
+
+
         />
 
 
