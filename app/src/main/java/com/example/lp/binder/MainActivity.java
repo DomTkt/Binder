@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public DatabaseReference databaseFirebase;
     public String userUid;
     public FirebaseUser user;
+    public ChatDetailFragment chatDetailFragment;
 
 
     @Override
@@ -86,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openChat(Chat chat){
-
+        chatDetailFragment = ChatDetailFragment.newInstance(chat);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.contentContainer, ChatDetailFragment.newInstance(chat),"ChatDetailFragment");
+        fragmentTransaction.replace(R.id.contentContainer, chatDetailFragment,"ChatDetailFragment");
         fragmentTransaction.commit();
 
     }
