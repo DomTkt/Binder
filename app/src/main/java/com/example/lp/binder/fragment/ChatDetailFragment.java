@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 
@@ -81,9 +83,9 @@ public class ChatDetailFragment extends Fragment {
                 if(etMess.getText().toString().isEmpty()){
                     Toast.makeText(mainActivity,"Vous n'avez rien écris", Toast.LENGTH_SHORT).show();
                 }else{
-                    etMess.setText("");
-                    sendMess(etMess.getText().toString());
 
+                    sendMess(etMess.getText().toString());
+                    etMess.setText("");
                 }
 
             }
@@ -114,6 +116,7 @@ public class ChatDetailFragment extends Fragment {
     }
 
     public void loadData(){
+        sortMessByTmp();
         llcontent.removeAllViewsInLayout();
         DisplayMetrics displayMetrics = mainActivity.getResources().getDisplayMetrics();
         float width = displayMetrics.widthPixels;
@@ -145,5 +148,15 @@ public class ChatDetailFragment extends Fragment {
 
             llcontent.addView(llmess, layoutParams);
         }
+    }
+
+    public void sortMessByTmp(){
+        Collections.sort(chat.getConversation(), new Comparator<Message>() {
+            @Override
+            public int compare(Message m1, Message m2) {
+                return m1.getTime().compareTo(m2.getTime());
+            }
+        });
+
     }
 }
