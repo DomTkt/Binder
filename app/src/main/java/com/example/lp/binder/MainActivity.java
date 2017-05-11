@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                 }
 
-                if (tabId == R.id.tab_account) {
-                    System.out.println("TAB ACCOUNT");
-                   Intent i  = new Intent(MainActivity.this, ProfilCustom.class);
-                    startActivity(i);
-                }
+//                if (tabId == R.id.tab_account) {
+//                    System.out.println("TAB ACCOUNT");
+//                    Intent i  = new Intent(MainActivity.this, ProfilCustom.class);
+//                    startActivity(i);
+//                }
             }
         });
     }

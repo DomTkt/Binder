@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+       
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/imgRawContact"
+        />
+
+    <TextView
+        android:id="@+id/txtContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgRawContact"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="19dp"
+        android:layout_toEndOf="@+id/imgRawContact"
+        android:layout_toLeftOf="@+id/icRawBind"
+        android:layout_toRightOf="@+id/imgRawContact"
+        android:text="Test" />
+
+    <ImageView
+        android:id="@+id/icRawBind"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/vector"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/icRawMess"
+        android:layout_toStartOf="@+id/icRawMess" />
+
+    <ImageView
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/icRawMess"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/shape"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/icRawBind"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>

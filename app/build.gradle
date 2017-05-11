@@ -45,6 +45,7 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.2.1'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile project(path: ':data')
 }
 
 apply plugin: 'com.google.gms.google-services'
