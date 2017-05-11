@@ -5,14 +5,20 @@
     tools:context="com.example.lp.binder.fragment.ChatDetailFragment">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/linearLayout">
 
             <LinearLayout
                 android:id="@+id/ll_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
             </LinearLayout>
@@ -20,31 +26,36 @@
         </ScrollView>
 
         <LinearLayout
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_mess_shape">
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_add"/>
-            <EditText
-                android:id="@+id/etmess"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Type a mess"
-                android:textColorHint="@android:color/darker_gray"/>
+                android:layout_gravity="bottom"
+                android:background="@drawable/edit_mess_shape"
+                android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout">
+
             <ImageView
-                android:id="@+id/sendmess"
-                android:layout_gravity="center_vertical|right"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_send"/>
-        </LinearLayout>
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_add" />
 
+            <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Type a mess"
+                    android:textColorHint="@android:color/darker_gray" />
 
+            <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_send" />
+            </LinearLayout>
+
+    </RelativeLayout>
 
 
 </FrameLayout>
