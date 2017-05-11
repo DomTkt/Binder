@@ -228,6 +228,8 @@ public class ProfilCustom extends AppCompatActivity {
                         uploadPicture();
                         refUser.child(User.AGE).getRef().setValue(Integer.valueOf(editOld.getText().toString()));
 
+                        finish();
+
                     }catch (Exception e){
                         Toast.makeText(getApplicationContext(),"Erreur",Toast.LENGTH_SHORT).show();
                         String erreur = e.getMessage();
@@ -345,7 +347,7 @@ public class ProfilCustom extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     String url = dataSnapshot.getValue(String.class);
-                    Picasso.with(getBaseContext()).load(url).resize(imageView.getHeight(),imageView.getWidth()).into(imageView);
+                    Picasso.with(getBaseContext()).load(url).resize(100,100).into(imageView);
                 }
             }
 

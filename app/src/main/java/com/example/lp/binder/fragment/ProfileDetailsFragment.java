@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,6 +42,7 @@ public class ProfileDetailsFragment extends Fragment {
     private ImageView chatIcon;
     private ImageView rdvIcon;
     private RecyclerView picturesGridView;
+    private ImageView imageView;
 
     public static ProfileDetailsFragment newInstance() {
         ProfileDetailsFragment fragment = new ProfileDetailsFragment();
@@ -60,6 +62,7 @@ public class ProfileDetailsFragment extends Fragment {
         chatIcon = (ImageView) view.findViewById(R.id.fragment_profile_details_chat_icon);
         rdvIcon = (ImageView) view.findViewById(R.id.fragment_profile_details_rdv_icon);
         picturesGridView = (RecyclerView) view.findViewById(R.id.fragment_profile_details_pictures_grid);
+        imageView = (ImageView) view.findViewById(R.id.profilPicture);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -80,25 +83,31 @@ public class ProfileDetailsFragment extends Fragment {
                     nameTextView.setText(dataSnapshot.child(User.NICKNAME).getValue(String.class));
                 }
                 if(dataSnapshot.child(User.AGE).exists()){
-                    ageTextView.setText(dataSnapshot.child(User.AGE).getValue(String.class) + "y.o");
+                    ageTextView.setText(Long.toString(dataSnapshot.child(User.AGE).getValue(Long.class))   + "y.o");
                 }
                 String genderString = "";
                 if(dataSnapshot.child(User.GENDER).exists()){
-                    int gender = dataSnapshot.child(User.GENDER).getValue(Integer.class);
+                    String gender = dataSnapshot.child(User.GENDER).getValue(String.class);
                     genderString = getGender(gender);
                 }
                 if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).exists()){
-                    int gender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).getValue(Integer.class);
-                    genderString += "looking for a " + getGender(gender);
+                    String gender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF1).getValue(String.class);
+                    genderString += " looking for a " + getGender(gender);
                 }
                 if(dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).exists()){
-                    int gender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(Integer.class);
+                    String gender = dataSnapshot.child(User.GENDER_PREF).child(User.GENDER_PREF2).getValue(String.class);
                     genderString += " and a " + getGender(gender);
                 }
                 lookingForTextView.setText(genderString);
                 if(dataSnapshot.child(User.DESCRIPTION).exists()){
                     descriptionTextView.setText(dataSnapshot.child(User.DESCRIPTION).getValue(String.class));
                 }
+                if(dataSnapshot.child(User.URL_PICTURE).exists()){
+                    String url = dataSnapshot.child(User.URL_PICTURE).getValue(String.class);
+                    Picasso.with(getActivity().getApplicationContext()).load(url).resize(100,100).into(imageView);
+                }
+
+
 
             }
 
@@ -119,8 +128,8 @@ public class ProfileDetailsFragment extends Fragment {
 
     }
 
-    private String getGender(int gender){
-        if(gender == 0)
+    private String getGender(String gender){
+        if(gender.equals("gender1"))
             return "man";
         else
             return  "woman";

@@ -11,10 +11,11 @@
         android:layout_height="220dp">
 
         <ImageView
+            android:id="@+id/profilPicture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/ic_binder"/>
+            android:src="@mipmap/ic_binder" />
 
         <LinearLayout
             android:layout_width="match_parent"
