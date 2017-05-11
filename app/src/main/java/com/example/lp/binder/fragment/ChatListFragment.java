@@ -193,7 +193,9 @@ public class ChatListFragment extends Fragment {
                     listConvID.add(id);
                 }
                 adapter.notifyDataSetChanged();
-
+                if(mainActivity.chatDetailFragment != null){
+                    mainActivity.chatDetailFragment.loadData();
+                }
             }
 
             @Override
@@ -233,6 +235,9 @@ public class ChatListFragment extends Fragment {
                     Toast.makeText(mainActivity,"Vous n'avez pas de conversations", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
+                if(mainActivity.chatDetailFragment != null){
+                    mainActivity.chatDetailFragment.loadData();
+                }
             }
 
             @Override
@@ -278,6 +283,10 @@ public class ChatListFragment extends Fragment {
                 }
 
                 adapter.notifyDataSetChanged();
+                if(mainActivity.chatDetailFragment != null){
+                    mainActivity.chatDetailFragment.loadData();
+                }
+
             }
 
             @Override

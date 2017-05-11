@@ -144,7 +144,7 @@ public class ChatDetailFragment extends Fragment {
 
             TextView tv2 = (TextView) llmess.findViewById(R.id.mess_hour);
             DateFormat df = new DateFormat();
-            tv2.setText(df.format("dd/MM/yyyy hh:mm:ss",chat.getConversation().get(i).getTime()));
+            tv2.setText(df.format("dd/MM/yyyy HH:mm:ss",chat.getConversation().get(i).getTime()));
 
             llcontent.addView(llmess, layoutParams);
         }
