@@ -11,8 +11,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.data.Chat;
 import com.example.data.Message;
@@ -23,11 +26,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
+import java.util.UUID;
+
 
 public class ChatDetailFragment extends Fragment {
 
     private Chat chat;
     private MainActivity mainActivity;
+    private ImageView ivSendMess;
+    private EditText etMess;
+    private LinearLayout llcontent;
 
 
     public ChatDetailFragment() {
@@ -62,8 +71,50 @@ public class ChatDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat_detail, container, false);
-        LinearLayout llcontent = (LinearLayout) view.findViewById(R.id.ll_content);
+        llcontent = (LinearLayout) view.findViewById(R.id.ll_content);
+        ivSendMess = (ImageView) view.findViewById(R.id.sendmess);
+        etMess = (EditText) view.findViewById(R.id.etmess);
 
+        ivSendMess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etMess.getText().toString().isEmpty()){
+                    Toast.makeText(mainActivity,"Vous n'avez rien écris", Toast.LENGTH_SHORT).show();
+                }else{
+                    etMess.setText("");
+                    sendMess(etMess.getText().toString());
+
+                }
+
+            }
+        });
+
+        loadData();
+        return view;
+    }
+
+
+
+    public boolean isMyMess(Message mess){
+        return mess.getUserSender().getId().equals(mainActivity.userUid);
+    }
+
+    public void sendMess(String content){
+        String newId = UUID.randomUUID().toString();
+        DatabaseReference n = mainActivity.databaseFirebase.child("conversations")
+                .child(chat.getId())
+                .child("messages")
+                .child(newId).getRef();
+
+
+        n.child("content").getRef().setValue(content);
+        n.child("timestamp").getRef().setValue(Long.toString(new Date().getTime()));
+        n.child("userId").getRef().setValue(mainActivity.userUid);
+        loadData();
+    }
+
+    public void loadData(){
+        llcontent.removeAllViewsInLayout();
         DisplayMetrics displayMetrics = mainActivity.getResources().getDisplayMetrics();
         float width = displayMetrics.widthPixels;
 
@@ -94,12 +145,5 @@ public class ChatDetailFragment extends Fragment {
 
             llcontent.addView(llmess, layoutParams);
         }
-        return view;
-    }
-
-
-
-    public boolean isMyMess(Message mess){
-        return mess.getUserSender().getId().equals(mainActivity.userUid);
     }
 }

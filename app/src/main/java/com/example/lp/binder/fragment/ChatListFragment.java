@@ -253,13 +253,17 @@ public class ChatListFragment extends Fragment {
                             for (Iterator<DataSnapshot> messIter = dataSnapshot.child(listConvID.get(i)).child("messages").getChildren().iterator(); messIter.hasNext();){
                                 DataSnapshot ds = messIter.next();
                                 User sender;
-                                if(ds.child("userId").getValue(String.class).equals(connectedUser.getId())){
+
+                                if(ds.child("userId").exists() && ds.child("userId").getValue(String.class).equals(connectedUser.getId())){
                                     sender = connectedUser;
                                 }else{
                                     sender = listUserConv.get(i);
                                 }
-                                Message message = new Message(ds.getKey(),new Date(Long.valueOf(ds.child("timestamp").getValue(String.class))),sender,ds.child("content").getValue(String.class));
-                                mess.add(message);
+                                if(ds.child("timestamp").exists() && ds.child("content").exists()){
+                                    Message message = new Message(ds.getKey(),new Date(Long.valueOf(ds.child("timestamp").getValue(String.class))),sender,ds.child("content").getValue(String.class));
+                                    mess.add(message);
+                                }
+
                             }
                             Chat chat = new Chat(listConvID.get(i),connectedUser,listUserConv.get(i),mess);
                             listChat.add(chat);
